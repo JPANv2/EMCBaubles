@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "emcbaubles:orange_matter"
+  },
+  "pattern": [
+    "XYX",
+    "XYX",
+    "XYX"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": {
+      "item": "projecte:aeternalis_fuel"
+    },
+ 	"Y": {
+      "item": "emcbaubles:yellow_matter"
+    }
+  }
+}

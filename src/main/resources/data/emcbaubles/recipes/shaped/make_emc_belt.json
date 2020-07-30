@@ -1,0 +1,18 @@
+{
+  "result": {
+    "item": "emcbaubles:emc_belt"
+  },
+  "pattern": [
+    "ZXZ"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": {
+      "item": "projecte:red_matter"
+    },
+ 	"Z": {
+      "item": "minecraft:leather"
+    }
+  }
+  }
+}

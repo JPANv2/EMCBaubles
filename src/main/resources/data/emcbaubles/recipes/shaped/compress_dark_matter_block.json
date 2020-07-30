@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "emcbaubles:compressed_dark_matter_block"
+  },
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": {
+      "item": "projecte:dark_matter_block"
+    }
+  }
+}

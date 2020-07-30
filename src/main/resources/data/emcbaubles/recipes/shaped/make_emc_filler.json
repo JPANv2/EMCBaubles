@@ -1,0 +1,20 @@
+{
+  "result": {
+    "item": "emcbaubles:emc_refiller"
+  },
+  "pattern": [
+    " X ",
+    "Z Z",
+    " Z "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": {
+      "item": "projecte:transmutation_table"
+    },
+ 	"Z": {
+      "item": "minecraft:gold_ingot"
+    }
+  }
+  }
+}

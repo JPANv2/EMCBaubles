@@ -1,0 +1,12 @@
+{
+  "result": {
+    "item": "emcbaubles:purple_matter",
+    "count": 4
+  },
+  "ingredients": [
+    {
+      "item": "emcbaubles:purple_matter_block"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

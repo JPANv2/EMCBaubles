@@ -1,0 +1,18 @@
+{
+  "result": {
+    "item": "emcbaubles:collector_mk2_necklace"
+  },
+  "pattern": [
+    "X",
+    "Y"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": {
+      "item": "projecte:dark_matter"
+    },
+ 	"Y": {
+      "item": "emcbaubles:collector_mk1_necklace"
+    }
+  }
+}

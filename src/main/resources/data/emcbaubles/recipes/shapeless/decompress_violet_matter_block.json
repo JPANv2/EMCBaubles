@@ -1,0 +1,12 @@
+{
+  "result": {
+    "item": "emcbaubles:violet_matter_block",
+    "count": 9
+  },
+  "ingredients": [
+    {
+      "item": "emcbaubles:compressed_violet_matter_block"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

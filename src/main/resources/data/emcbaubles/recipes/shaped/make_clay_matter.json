@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "emcbaubles:clay_matter"
+  },
+  "pattern": [
+    "XXX",
+    "XYX",
+    "XXX"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": {
+      "item": "minecraft:clay"
+    },
+ 	"Y": {
+      "item": "projecte:collector_mk1"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+modLoader="javafml" 
+loaderVersion="[31,)"
+issueTrackerURL=https://github.com/JPANv2/ 
+[[mods]] 
+modId="emcbaubles"
+version="1.0" #mandatory
+displayName="EMC Baubles" #mandatory
+#displayURL="http://example.com/" 
+logoFile="emcneck3.png"
+credits="ProjectE devs, for making the mod this one expands upon, Project EX devs for the matters, and the Equivalent Exchange devs for the original idea"
+authors="JPAN v2"
+# The description text for the mod (multi line!) (#mandatory)
+description='''
+This mod adds some trinkets with useful ProjectE functionality, including:
+- EMC Collector Necklaces and portable Power Flower Charms for generating EMC directly to your balance;
+- EMC Belt that destroys any picked up item with EMC into its EMC value (learning it in the process);
+- A stylish Bracelet that will auto-refill your held item when it breaks or is otherwise consumed (place block, eat food, etc).
+
+All these will only work if they are equipped in their respective CuriosAPI slot, so you will require   
+
+It also adds new Matter tiers (from Project EX, will probably be replaced when it comes out in this version), Blocks for said matters (4 of the corresponding matter) and Compressed Matter Blocks (9 matter blocks)
+'''
+
+[[dependencies.emcbaubles]]
+  modId="minecraft"
+  mandatory=true
+  versionRange="[1.15.2]"
+  side="BOTH"
+[[dependencies.emcbaubles]]
+  modId="forge"
+  mandatory=true
+  versionRange="[31.0.13,)"
+  side="BOTH"
+[[dependencies.emcbaubles]]
+  modId="projecte"
+  mandatory=true
+  versionRange="[1,)"
+  side="BOTH"

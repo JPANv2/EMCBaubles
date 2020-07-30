@@ -1,0 +1,12 @@
+{
+  "result": {
+    "item": "projecte:dark_matter_block",
+    "count": 9
+  },
+  "ingredients": [
+    {
+      "item": "emcbaubles:compressed_dark_matter_block"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

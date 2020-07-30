@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "emcbaubles:flower_mk14_charm"
+  },
+  "pattern": [
+    "ZX ",
+    " Y ",
+    " XZ"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": {
+      "item": "emcbaubles:compressed_white_matter_block"
+    },
+ 	"Y": {
+      "item": "emcbaubles:flower_mk13_charm"
+    },
+ 	"Z": {
+      "item": "minecraft:gold_ingot"
+    }
+  }
+}

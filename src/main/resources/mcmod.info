@@ -1,0 +1,16 @@
+[
+{
+  "modid": "emcbaubles",
+  "name": "EMC Baubles",
+  "description": "Adds a Infinite EMC storage block, baubles that generate EMC and a belt that converts picked up items into EMC.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["JPAN"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

@@ -1,0 +1,12 @@
+{
+  "result": {
+    "item": "emcbaubles:white_matter",
+    "count": 4
+  },
+  "ingredients": [
+    {
+      "item": "emcbaubles:white_matter_block"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

@@ -1,0 +1,12 @@
+{
+  "result": {
+    "item": "projecte:collector_mk1",
+    "count": 1
+  },
+  "ingredients": [
+    {
+      "item": "emcbaubles:collector_mk1_necklace"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}
