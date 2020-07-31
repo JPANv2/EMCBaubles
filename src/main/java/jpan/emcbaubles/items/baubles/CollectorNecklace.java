@@ -2,9 +2,12 @@ package jpan.emcbaubles.items.baubles;
 
 import moze_intel.projecte.api.ProjectEAPI;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
+import moze_intel.projecte.api.capabilities.item.IPedestalItem;
 import moze_intel.projecte.capability.ItemCapability;
 import moze_intel.projecte.capability.ItemCapabilityWrapper;
+import moze_intel.projecte.capability.PedestalItemCapabilityWrapper;
 import moze_intel.projecte.gameObjs.ObjHandler;
+import moze_intel.projecte.gameObjs.tiles.DMPedestalTile;
 import moze_intel.projecte.integration.IntegrationHelper;
 import moze_intel.projecte.utils.Constants;
 import net.minecraft.entity.Entity;
@@ -13,8 +16,12 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.ModList;
@@ -22,6 +29,7 @@ import net.minecraftforge.fml.ModList;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
@@ -31,7 +39,7 @@ import jpan.emcbaubles.items.CurioCapableTickItem;
 import jpan.emcbaubles.items.CurioEquippedItemCapacity;
 import jpan.emcbaubles.items.ItemList;
 
-public class CollectorNecklace extends Item implements CurioCapableTickItem{
+public class CollectorNecklace extends Item implements CurioCapableTickItem, IPedestalItem{
 
 	public final int tier;
 	public long emcPerTick;
@@ -45,6 +53,7 @@ public class CollectorNecklace extends Item implements CurioCapableTickItem{
 		this.tier = tier;
 		this.emcPerTick = EMCPerTick;
 		addItemCapability(IntegrationHelper.CURIO_MODID, () -> CurioEquippedItemCapacity::new);
+		addItemCapability("projecte", () -> PedestalItemCapabilityWrapper::new);
 	}
 	
 	protected void addItemCapability(String modid, Supplier<Supplier<ItemCapability<?>>> capabilitySupplier) {
@@ -64,10 +73,8 @@ public class CollectorNecklace extends Item implements CurioCapableTickItem{
 		if (world.isRemote || !(entity instanceof PlayerEntity)) {
 			return;
 		}
-		ticks++;
-		if(ticks < 20)
+		if(ticks != 0)
 			return;
-		ticks = 0;
 		/*
 		if(System.currentTimeMillis() < milisecondTime + 1000) {
 			return;
@@ -80,6 +87,25 @@ public class CollectorNecklace extends Item implements CurioCapableTickItem{
 		}
 		if(player instanceof ServerPlayerEntity)
 			provider.sync((ServerPlayerEntity)player);
+	}
+
+	@Override
+	public List<ITextComponent> getPedestalDescription() {
+		List<ITextComponent> list = new ArrayList<>();
+		list.add(new StringTextComponent("Provides to the player that placed it on the pedestal " +emcPerTick+ "EMC/s").applyTextStyle(TextFormatting.BLUE));
+		return list;
+	}
+
+	@Override
+	public void updateInPedestal(World arg0, BlockPos arg1) {
+		UUID id = EMCBaubles.pedestalPlacers.get(arg1);
+		if(id == null)
+			return;
+		PlayerEntity pe = arg0.getPlayerByUuid(id);
+		TileEntity te = arg0.getTileEntity(arg1);
+		if(te == null || !(te instanceof DMPedestalTile))
+			return;
+		curioTick(((DMPedestalTile)te).getInventory().getStackInSlot(0), arg0,pe,0,true);
 	}
 
 }

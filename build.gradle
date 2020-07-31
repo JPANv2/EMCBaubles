@@ -14,7 +14,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 def ENV = System.getenv()
-version = "0.1"
+version = "1.15.2-1.0"
 group = "jpan.emcbaubles"
 archivesBaseName = "emcbaubles"
 

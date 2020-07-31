@@ -2,9 +2,9 @@
 {
   "modid": "emcbaubles",
   "name": "EMC Baubles",
-  "description": "Adds a Infinite EMC storage block, baubles that generate EMC and a belt that converts picked up items into EMC.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
+  "description": "This mod adds some trinkets with useful ProjectE functionality, including:\n- EMC Collector Necklaces and portable Power Flower Charms for generating EMC directly to your balance;\n- EMC Belt that destroys any picked up item with EMC into its EMC value (learning it in the process);\n- A stylish Bracelet that will auto-refill your held item when it breaks or is otherwise consumed (place block, eat food, etc).\n\nAll these will only work if they are equipped in their respective CuriosAPI slot, so you will require CuriosAPI to make full use of the mod.\nThe Collector necklaces and Power Flower charms will also work if placed in a Dark Matter pedestal.\n\nIt also adds new Matter tiers (from Project EX, will probably be replaced when it comes out in this version), Blocks for said matters (4 of the corresponding matter) and Compressed Matter Blocks (9 matter blocks)",
+  "version": "1.0",
+  "mcversion": "1.15.2",
   "url": "",
   "updateUrl": "",
   "authorList": ["JPAN"],

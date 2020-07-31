@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "emcbaubles:emc_build_wand"
+  },
+  "pattern": [
+    " XZ",
+    "XX ",
+    "Y  "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": {
+      "item": "projecte:red_matter_block"
+    },
+    "Y": {
+      "item": "projecte:transmutation_tablet"
+    },
+    "Z": {
+      "item": "emcbaubles:compressed_red_matter_block"
+    }
+  }
+}

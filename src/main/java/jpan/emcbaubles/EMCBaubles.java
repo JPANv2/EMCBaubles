@@ -2,7 +2,12 @@ package jpan.emcbaubles;
 
 
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import jpan.emcbaubles.items.ItemList;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -18,6 +23,7 @@ public class EMCBaubles {
 	
 	public static ModContainer _instance;
 	
+	public static HashMap<BlockPos, UUID> pedestalPlacers = new HashMap<>();
 	/*Blocks and tiles*/
 	
 	public EMCBaubles() {

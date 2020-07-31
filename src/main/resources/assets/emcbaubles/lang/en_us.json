@@ -1,6 +1,7 @@
 {
 "item.emcbaubles.emc_belt" : "EMC Converting Belt",
 "item.emcbaubles.emc_refiller" : "Item Auto Refiller Bracelet",
+"item.emcbaubles.emc_build_wand" : "EMC-Powered Build Wand",
 
 "item.emcbaubles.clay_matter" : "Clay Matter",
 "item.emcbaubles.magenta_matter" : "Magenta Matter",
@@ -81,7 +82,7 @@
 "item.emcbaubles.flower_mk15_charm" : "Power Flower Charm MK15",
 "item.emcbaubles.flower_mk16_charm" : "Final Power Flower Charm",
 
-"itemGroups.emcbaubles": "EMC Baubles",
+"itemGroup.emcbaubles": "EMC Baubles",
 
 "pe.emc.emc_tooltip_prefix" : "EMC:",
 "pe.emc.maxgenrate_tooltip" : "Maximum Generation Rate:",

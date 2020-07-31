@@ -171,7 +171,26 @@ public class EMCRecipeGenerator {
 				"    }\r\n" +
 			"  }\r\n" +
 			"}";
-	
+	public static String blockLoot = "{\r\n" + 
+			"  \"type\": \"minecraft:block\",\r\n" + 
+			"  \"pools\": [\r\n" + 
+			"    {\r\n" + 
+			"      \"name\": \"main\",\r\n" + 
+			"      \"rolls\": 1,\r\n" + 
+			"      \"entries\": [\r\n" + 
+			"        {\r\n" + 
+			"          \"type\": \"minecraft:item\",\r\n" + 
+			"          \"conditions\": [\r\n" + 
+			"            {\r\n" + 
+			"              \"condition\": \"minecraft:survives_explosion\"\r\n" + 
+			"            }\r\n" + 
+			"          ],\r\n" + 
+			"          \"name\": \"zblock\"\r\n" + 
+			"        }\r\n" + 
+			"      ]\r\n" + 
+			"    }\r\n" + 
+			"  ]\r\n" + 
+			"}";
 	public static String[] mattersNames = {
 			"clay_matter",
 			"dark_matter",
@@ -243,8 +262,9 @@ public class EMCRecipeGenerator {
 	};
 	
 	public static void main(String[] args) throws Exception {
-		String shapeless = "c:\\minecraft\\recipes\\shapeless\\";
-		String shaped = "c:\\minecraft\\recipes\\shaped\\";
+		String shapeless = "c:\\minecraft\\"+ EMCBaubles.ModID+"\\recipes\\shapeless\\";
+		String shaped = "c:\\minecraft\\"+ EMCBaubles.ModID+"\\recipes\\shaped\\";
+		String block_loot_tables = "c:\\minecraft\\"+ EMCBaubles.ModID+"\\loot_tables\\blocks\\";
 		
 		try {
 		makeDecompressRecipes(shapeless);
@@ -253,11 +273,14 @@ public class EMCRecipeGenerator {
 		makeCharmRecipes(shaped);
 		makeMatterRecipes(shaped);
 		makeOtherRecipes(shaped);
-		makeOtherRecipes(shaped);
+		
+		makeBlockLootTables(block_loot_tables);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
+
+	
 
 	private static void makeDecompressRecipes(String shapeless) throws IOException {
 		File dir = new File(shapeless);
@@ -436,6 +459,58 @@ public class EMCRecipeGenerator {
 				"}");
 		fwr.flush();
 		fwr.close();
+		f = new File(dir,"make_emc_build_wand.json");
+		f.createNewFile();
+		fwr = new FileWriter(f);
+		fwr.write(
+		"{\r\n" + 
+		"  \"result\": {\r\n" + 
+		"    \"item\": \"emcbaubles:emc_build_wand\"\r\n" + 
+		"  },\r\n" + 
+		"  \"pattern\": [\r\n" + 
+		"    \" XZ\",\r\n" + 
+		"    \"XX \",\r\n" + 
+		"    \"Y  \"\r\n" + 
+		"  ],\r\n" + 
+		"  \"type\": \"minecraft:crafting_shaped\",\r\n" + 
+		"  \"key\": {\r\n" + 
+		"    \"X\": {\r\n" + 
+		"      \"item\": \"projecte:red_matter_block\"\r\n" + 
+		"    },\r\n" + 
+		"    \"Y\": {\r\n" + 
+		"      \"item\": \"projecte:transmutation_tablet\"\r\n" + 
+		"    },\r\n" + 
+		"    \"Z\": {\r\n" + 
+		"      \"item\": \"emcbaubles:compressed_red_matter_block\"\r\n" + 
+		"    }\r\n" + 
+		"  }\r\n" + 
+		"}");
+		fwr.flush();
+		fwr.close();
 	}
 	
+	private static void makeBlockLootTables(String block_loot_tables) throws IOException {
+		File dir = new File(block_loot_tables);
+		if(!dir.exists())
+			dir.mkdirs();
+		for(int i = 0; i < cmatterBlocks.length; i++) {
+			File f = new File(dir,cmatterBlocks[i].substring(11)+".json");
+			f.createNewFile();
+			FileWriter fwr = new FileWriter(f);
+			String loot = blockLoot.replaceAll("zblock", cmatterBlocks[i]);
+			fwr.write(loot);
+			fwr.flush();
+			fwr.close();
+			if(i >2 || i == 0) {
+				f = new File(dir,matterBlocks[i].substring(11)+".json");
+				f.createNewFile();
+				fwr = new FileWriter(f);
+				loot = blockLoot.replaceAll("zblock", matterBlocks[i]);
+				fwr.write(loot);
+				fwr.flush();
+				fwr.close();	
+			}
+		}
+		
+	}
 }
