@@ -2,7 +2,6 @@ package jpan.emcbaubles.items;
 
 import moze_intel.projecte.capability.BasicItemCapability;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
 import net.minecraftforge.common.capabilities.Capability;
 import top.theillusivec4.curios.api.capability.CuriosCapability;
 import top.theillusivec4.curios.api.capability.ICurio;

@@ -1,7 +1,5 @@
 package jpan.emcbaubles.eventhandler;
 
-import org.apache.logging.log4j.LogManager;
-
 import jpan.emcbaubles.EMCBaubles;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
