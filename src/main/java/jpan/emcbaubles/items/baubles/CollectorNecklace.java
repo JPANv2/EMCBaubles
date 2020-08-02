@@ -1,15 +1,26 @@
 package jpan.emcbaubles.items.baubles;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Supplier;
+
+import javax.annotation.Nonnull;
+
+import jpan.emcbaubles.EMCBaubles;
+import jpan.emcbaubles.capabilities.IPedestalPlacerWorldCapabilty;
+import jpan.emcbaubles.items.CurioCapableTickItem;
+import jpan.emcbaubles.items.CurioEquippedItemCapacity;
+import jpan.emcbaubles.items.ItemList;
 import moze_intel.projecte.api.ProjectEAPI;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.item.IPedestalItem;
 import moze_intel.projecte.capability.ItemCapability;
 import moze_intel.projecte.capability.ItemCapabilityWrapper;
 import moze_intel.projecte.capability.PedestalItemCapabilityWrapper;
-import moze_intel.projecte.gameObjs.ObjHandler;
 import moze_intel.projecte.gameObjs.tiles.DMPedestalTile;
 import moze_intel.projecte.integration.IntegrationHelper;
-import moze_intel.projecte.utils.Constants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -25,19 +36,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.ModList;
-
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-
-import jpan.emcbaubles.EMCBaubles;
-import jpan.emcbaubles.items.CurioCapableTickItem;
-import jpan.emcbaubles.items.CurioEquippedItemCapacity;
-import jpan.emcbaubles.items.ItemList;
 
 public class CollectorNecklace extends Item implements CurioCapableTickItem, IPedestalItem{
 
@@ -98,7 +96,10 @@ public class CollectorNecklace extends Item implements CurioCapableTickItem, IPe
 
 	@Override
 	public void updateInPedestal(World arg0, BlockPos arg1) {
-		UUID id = EMCBaubles.pedestalPlacers.get(arg1);
+		IPedestalPlacerWorldCapabilty cap = arg0.getCapability(EMCBaubles.PEDESTAL_PLACER_CAPABILITY).orElse(null);
+		if(cap == null) return;
+		
+		UUID id = cap.getPlacer(arg1);
 		if(id == null)
 			return;
 		PlayerEntity pe = arg0.getPlayerByUuid(id);

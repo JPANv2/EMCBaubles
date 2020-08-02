@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import moze_intel.projecte.PECore;
-import net.minecraft.block.Block;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;

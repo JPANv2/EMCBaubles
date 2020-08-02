@@ -1,14 +1,26 @@
 package jpan.emcbaubles.items.baubles;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Supplier;
+
+import javax.annotation.Nonnull;
+
+import jpan.emcbaubles.EMCBaubles;
+import jpan.emcbaubles.capabilities.IPedestalPlacerWorldCapabilty;
+import jpan.emcbaubles.items.CurioCapableTickItem;
+import jpan.emcbaubles.items.CurioEquippedItemCapacity;
+import jpan.emcbaubles.items.ItemList;
 import moze_intel.projecte.api.ProjectEAPI;
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider;
 import moze_intel.projecte.api.capabilities.item.IPedestalItem;
 import moze_intel.projecte.capability.ItemCapability;
 import moze_intel.projecte.capability.ItemCapabilityWrapper;
-import moze_intel.projecte.gameObjs.ObjHandler;
+import moze_intel.projecte.capability.PedestalItemCapabilityWrapper;
 import moze_intel.projecte.gameObjs.tiles.DMPedestalTile;
 import moze_intel.projecte.integration.IntegrationHelper;
-import moze_intel.projecte.utils.Constants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -25,18 +37,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.ModList;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-import jpan.emcbaubles.EMCBaubles;
-import jpan.emcbaubles.items.CurioCapableTickItem;
-import jpan.emcbaubles.items.CurioEquippedItemCapacity;
-import jpan.emcbaubles.items.ItemList;
-
 public class PowerFlowerCharm extends Item implements CurioCapableTickItem, IPedestalItem{
 
 	public final int tier;
@@ -52,6 +52,7 @@ public class PowerFlowerCharm extends Item implements CurioCapableTickItem, IPed
 		this.tier = tier;
 		this.emcPerTick = EMCPerTick;
 		addItemCapability(IntegrationHelper.CURIO_MODID, () -> CurioEquippedItemCapacity::new);
+		addItemCapability("projecte", () -> PedestalItemCapabilityWrapper::new);
 	}
 
 	protected void addItemCapability(String modid, Supplier<Supplier<ItemCapability<?>>> capabilitySupplier) {
@@ -96,7 +97,10 @@ public class PowerFlowerCharm extends Item implements CurioCapableTickItem, IPed
 
 	@Override
 	public void updateInPedestal(World arg0, BlockPos arg1) {
-		UUID id = EMCBaubles.pedestalPlacers.get(arg1);
+		IPedestalPlacerWorldCapabilty cap = arg0.getCapability(EMCBaubles.PEDESTAL_PLACER_CAPABILITY).orElse(null);
+		if(cap == null) return;
+		
+		UUID id = cap.getPlacer(arg1);
 		if(id == null)
 			return;
 		PlayerEntity pe = arg0.getPlayerByUuid(id);
