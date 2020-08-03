@@ -3,7 +3,7 @@ loaderVersion="[31,)"
 #issueTrackerURL=https://github.com/JPANv2/ 
 [[mods]] 
 modId="emcbaubles"
-version="1.0" #mandatory
+version="1.1" #mandatory
 displayName="EMC Baubles" #mandatory
 #displayURL="http://example.com/" 
 logoFile="emcneck3.png"

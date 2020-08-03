@@ -13,6 +13,9 @@ import moze_intel.projecte.utils.EMCHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
@@ -36,6 +39,47 @@ public class BlockReplacementWand extends ItemMode {
 	@Override
 	public boolean canHarvestBlock(BlockState bs) {
 		return true;
+	}
+	
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+		if(EnchantmentHelper.getEnchantments(stack).containsKey(enchantment))
+			return false;
+		if(enchantment.equals(Enchantments.SILK_TOUCH)) {
+			if(EnchantmentHelper.getEnchantments(stack).containsKey(Enchantments.FORTUNE))
+				return false;
+			return true;
+		}
+		if(enchantment.equals(Enchantments.FORTUNE)) {
+			if(EnchantmentHelper.getEnchantments(stack).containsKey(Enchantments.SILK_TOUCH))
+				return false;
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+		for(Enchantment e: EnchantmentHelper.getEnchantments(book).keySet()) {
+			if(!canApplyAtEnchantingTable(stack, e))
+				return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return true;
+	}
+	
+	@Override
+	public int getItemEnchantability() {
+		return 30;
+	}
+	
+	@Override
+	public int getItemEnchantability(ItemStack stack) {
+		return getItemEnchantability();
 	}
 	
 	@Nonnull
@@ -127,11 +171,11 @@ public class BlockReplacementWand extends ItemMode {
 							if(!st.getBlock().equals(blockToReplace.getBlock())) {
 								ans.totalBlocksReplaced++;
 								List<ItemStack> drops = Block.getDrops(st, (ServerWorld) ctx.getWorld(), cur,
-										ctx.getWorld().getTileEntity(cur));
+										ctx.getWorld().getTileEntity(cur),ctx.getPlayer(), ctx.getItem());
 								for (ItemStack d : drops) {
 									if (EMCHelper.doesItemHaveEmc(d)) {
 										ans.totalEMC = ans.totalEMC
-												.add(BigInteger.valueOf(EMCHelper.getEmcSellValue(d)));
+												.add(BigInteger.valueOf(EMCHelper.getEmcSellValue(d)).multiply(BigInteger.valueOf(d.getCount())));
 									}
 								}
 							}
