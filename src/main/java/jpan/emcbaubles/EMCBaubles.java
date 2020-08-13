@@ -17,6 +17,8 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.Dimension;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -78,9 +80,10 @@ public class EMCBaubles {
 	@SubscribeEvent
     public void attachCap(AttachCapabilitiesEvent<World> event)
     {	
-		event.addCapability(new ResourceLocation(EMCBaubles.ModID, "pedestal_placers"), new PedestalPlacerWorldCapabiltyProvider());
-		
-		LogManager.getLogger().info("Attatched World Pedestal Player capability.");
+		if(event.getObject().dimension.getType() ==  DimensionType.OVERWORLD) {
+			event.addCapability(new ResourceLocation(EMCBaubles.ModID, "pedestal_placers"), new PedestalPlacerWorldCapabiltyProvider());
+			LogManager.getLogger().info("Attatched World Pedestal Player capability.");
+		}
 	}
 	
 }
