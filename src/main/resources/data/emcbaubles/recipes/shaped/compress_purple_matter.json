@@ -9,7 +9,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "X": {
-      "item": "emcbaubles:purple_matter"
+      "tag": "forge:pe/matter/tier6"
     }
   }
 }

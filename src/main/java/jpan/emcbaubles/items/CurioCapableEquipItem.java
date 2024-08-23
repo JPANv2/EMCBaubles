@@ -1,12 +1,12 @@
 package jpan.emcbaubles.items;
 
 import javax.annotation.Nonnull;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public interface CurioCapableEquipItem {
-	public void curioEquip(@Nonnull ItemStack stack, World world, @Nonnull Entity entity);
-	public void curioUnequip(@Nonnull ItemStack stack, World world, @Nonnull Entity entity);
+   void curioEquip(@Nonnull ItemStack var1, Level var2, @Nonnull Entity var3);
+
+   void curioUnequip(@Nonnull ItemStack var1, Level var2, @Nonnull Entity var3);
 }

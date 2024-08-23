@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "emcbaubles:blocks/compressed/fading_matter_block"
+    "all": "emcbaubles:block/compressed/fading_matter_block"
   }
 }

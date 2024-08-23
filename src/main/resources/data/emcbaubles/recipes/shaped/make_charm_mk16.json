@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "emcbaubles:flower_mk16_charm"
+  },
+  "pattern": [
+    "ZY ",
+    "YYY",
+    " YZ"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+ 	"Y": {
+      "item": "emcbaubles:flower_mk15_charm"
+    },
+ 	"Z": {
+      "item": "minecraft:gold_ingot"
+    }
+  }
+}

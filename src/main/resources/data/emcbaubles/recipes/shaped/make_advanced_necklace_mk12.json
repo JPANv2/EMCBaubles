@@ -9,7 +9,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "X": {
-      "item": "emcbaubles:yellow_matter"
+      "tag": "forge:pe/matter/tier12"
     },
  	"Y": {
       "item": "emcbaubles:collector_mk11_necklace"

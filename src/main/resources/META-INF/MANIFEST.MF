@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Specification-Title: emcbaubles
+Specification-Vendor: JPAN
+Specification-Version: 1
+Implementation-Title: emcbaubles
+Implementation-Version: 1.3
+Implementation-Vendor: JPAN
+Implementation-Timestamp: 2023-12-30T18:58:38+0000
+

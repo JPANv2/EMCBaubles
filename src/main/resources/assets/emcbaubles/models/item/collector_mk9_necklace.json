@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "emcbaubles:items/emcneck9"
+        "layer0": "emcbaubles:item/emcneck9"
     }
 }

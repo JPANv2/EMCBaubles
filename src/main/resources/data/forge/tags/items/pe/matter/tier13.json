@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "emcbaubles:orange_matter",
+    {
+      "id": "projectexpansion:orange_matter",
+      "required": false
+    }
+  ]
+}

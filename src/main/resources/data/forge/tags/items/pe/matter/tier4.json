@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "emcbaubles:magenta_matter",
+    {
+      "id": "projectexpansion:magenta_matter",
+      "required": false
+    }
+  ]
+}

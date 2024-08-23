@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "emcbaubles:lime_matter",
+    {
+      "id": "projectexpansion:lime_matter",
+      "required": false
+    }
+  ]
+}

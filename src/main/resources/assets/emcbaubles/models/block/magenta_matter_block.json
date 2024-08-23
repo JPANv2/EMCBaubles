@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "emcbaubles:blocks/matter/magenta_matter_block"
+    "all": "emcbaubles:block/matter/magenta_matter_block"
   }
 }

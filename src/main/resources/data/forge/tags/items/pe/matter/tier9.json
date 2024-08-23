@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "emcbaubles:cyan_matter",
+    {
+      "id": "projectexpansion:cyan_matter",
+      "required": false
+    }
+  ]
+}

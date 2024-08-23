@@ -1,322 +1,243 @@
 package jpan.emcbaubles.items;
 
-import jpan.emcbaubles.EMCBaubles;
+import java.util.List;
+import jpan.emcbaubles.PacketHandler;
 import jpan.emcbaubles.items.baubles.CollectorNecklace;
 import jpan.emcbaubles.items.baubles.EMCPickupBelt;
 import jpan.emcbaubles.items.baubles.EMCRefiller;
 import jpan.emcbaubles.items.baubles.PowerFlowerCharm;
-import moze_intel.projecte.gameObjs.ObjHandler;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
+import jpan.emcbaubles.items.gui.WandContainerMenu;
+import jpan.emcbaubles.items.gui.WandSelectGui;
+import moze_intel.projecte.gameObjs.registration.impl.ContainerTypeDeferredRegister;
+import moze_intel.projecte.gameObjs.registration.impl.ContainerTypeRegistryObject;
+import moze_intel.projecte.gameObjs.registration.impl.ItemDeferredRegister;
+import moze_intel.projecte.gameObjs.registration.impl.ItemRegistryObject;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.MenuScreens.ScreenConstructor;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.FishingRodItem;
+import net.minecraft.world.item.FlintAndSteelItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.IForgeRegistry;
-import top.theillusivec4.curios.api.CuriosAPI;
-import top.theillusivec4.curios.api.imc.CurioIMCMessage;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
+import net.minecraftforge.registries.ForgeRegistries.Keys;
 
-@Mod.EventBusSubscriber(modid = EMCBaubles.ModID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(
+   modid = "emcbaubles",
+   bus = Bus.MOD
+)
 public class ItemList {
-	
-	public static final ItemGroup cTab = new ItemGroup(EMCBaubles.ModID) {
-		@Override
-		public ItemStack createIcon() {
-			return new ItemStack(collector_necklaces[0]);
-		}
-	};
-	public static Item[] matters;
-	public static Block[] matterBlocks;
-	public static Block[] compressedMatterBlocks;
-	public static CollectorNecklace[] collector_necklaces;
-	public static EMCPickupBelt emc_belt;
-	public static EMCRefiller emc_refiller;
-	public static BlockReplacementWand emc_build_wand;
-	public static PowerFlowerCharm[] flower_charms;
-	private static boolean __init = false;
-	
-	public static final ResourceLocation braceletSlotTexture = new ResourceLocation(EMCBaubles.ModID, "curios/empty_bracelet");
-	public static final ResourceLocation pinSlotTexture = new ResourceLocation(EMCBaubles.ModID, "curios/empty_pin");
-	
-	public static void initCurios() {
-		InterModComms.sendTo("curios", CuriosAPI.IMC.REGISTER_TYPE, () -> new CurioIMCMessage("pin"));
-		InterModComms.sendTo("curios", CuriosAPI.IMC.REGISTER_TYPE, () -> new CurioIMCMessage("bracelet"));
-		InterModComms.sendTo("curios", CuriosAPI.IMC.REGISTER_ICON, () -> new Tuple<>("pin",pinSlotTexture));
-		InterModComms.sendTo("curios", CuriosAPI.IMC.REGISTER_ICON, () -> new Tuple<>("bracelet",braceletSlotTexture));
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	@SubscribeEvent
-	public static void stitchTextures(TextureStitchEvent.Pre evt) {
+   public static final ContainerTypeDeferredRegister CONTAINER_TYPES = new ContainerTypeDeferredRegister("emcbaubles");
+   public static final ContainerTypeRegistryObject<WandContainerMenu> WAND_CONTAINER = CONTAINER_TYPES.register(
+      "wand_select_screen", WandContainerMenu::fromNetwork
+   );
+   public static final ItemDeferredRegister ITEM_TYPES = new ItemDeferredRegister("emcbaubles");
+   public static final ItemRegistryObject<BlockReplacementWand> WAND_ITEM = ITEM_TYPES.register("emc_build_wand", BlockReplacementWand::new);
+   public static final ItemRegistryObject<EMCPickupBelt> BELT_ITEM = ITEM_TYPES.register("emc_belt", EMCPickupBelt::new);
+   public static final ItemRegistryObject<EMCRefiller> BRACELET_ITEM = ITEM_TYPES.register("emc_refiller", EMCRefiller::new);
+   public static final ItemList _instance = new ItemList();
+   public static String[] names = new String[]{
+      "clay", "dark", "red", "magenta", "pink", "purple", "violet", "blue", "cyan", "green", "lime", "yellow", "orange", "white", "fading"
+   };
+   public static long[] neck_power = new long[]{
+      4L, 12L, 40L, 160L, 640L, 2560L, 10240L, 40960L, 163840L, 655360L, 2621440L, 10485760L, 41943040L, 167772160L, 671088640L, 2000000000L
+   };
+   public static long[] flower_power = new long[]{
+      102L,
+      306L,
+      1020L,
+      4080L,
+      16020L,
+      10240L,
+      68580L,
+      296820L,
+      1187280L,
+      4749120L,
+      18996480L,
+      75985920L,
+      303953680L,
+      1215774720L,
+      4863098880L,
+      19452395520L,
+      48000000000000L
+   };
+   public static final ResourceLocation braceletSlotTexture = new ResourceLocation("emcbaubles", "curios/empty_bracelet");
+   public static final ResourceLocation pinSlotTexture = new ResourceLocation("emcbaubles", "curios/empty_pin");
 
-		if (evt.getMap().getTextureLocation() == PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+   public static boolean isStringItem(String s, ItemStack itm) {
+      ResourceLocation rl = new ResourceLocation(s);
+      TagKey<Item> tag = ItemTags.create(rl);
+      TagKey<Block> tagB = BlockTags.create(rl);
+      return itm.is(tag) ? true : itm.is((Item)ForgeRegistries.ITEMS.getValue(rl));
+   }
 
-			evt.addSprite(braceletSlotTexture);
-			evt.addSprite(pinSlotTexture);
+   public static boolean isStringBlock(String s, BlockState bl) {
+      ResourceLocation rl = new ResourceLocation(s);
+      TagKey<Block> tagB = BlockTags.create(rl);
+      return bl.is(tagB) ? true : bl.is((Block)ForgeRegistries.BLOCKS.getValue(rl));
+   }
 
-		}
-	}
-	
-	
-	
-	public static void init() {
-		collector_necklaces = new CollectorNecklace[16];
-		flower_charms = new PowerFlowerCharm[16];
-		matters = new Item[16];
-		matterBlocks = new Block[16];
-		compressedMatterBlocks = new Block[16];
-		int i = 0;
-		
-		matters[i] = new Item(new Item.Properties().group(ItemList.cTab)).setRegistryName(EMCBaubles.ModID, "clay_matter");
-		matterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "clay_matter_block");
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_clay_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(4, 1);
-		flower_charms[i] = new PowerFlowerCharm(102, 1);
-		i++;
-		
-		matters[i] = ObjHandler.darkMatter;
-		matterBlocks[i] = ObjHandler.dmBlock;
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_dark_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(12, 2);
-		flower_charms[i] = new PowerFlowerCharm(306, 2);
-		i++;
-		
-		matters[i] = ObjHandler.redMatter;
-		matterBlocks[i] = ObjHandler.rmBlock;
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_red_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(40, 3);
-		flower_charms[i] = new PowerFlowerCharm(1020, 3);
-		i++;
-		
-		matters[i] = new Item(new Item.Properties().group(ItemList.cTab)).setRegistryName(EMCBaubles.ModID, "magenta_matter");
-		matterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "magenta_matter_block");
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_magenta_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(160, 4);
-		flower_charms[i] = new PowerFlowerCharm(4080, 4);
-		i++;
-		
-		matters[i] = new Item(new Item.Properties().group(ItemList.cTab)).setRegistryName(EMCBaubles.ModID, "pink_matter");
-		matterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "pink_matter_block");
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_pink_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(640, 5);
-		flower_charms[i] = new PowerFlowerCharm(16020, 5);
-		i++;
-		
-		matters[i] = new Item(new Item.Properties().group(ItemList.cTab)).setRegistryName(EMCBaubles.ModID, "purple_matter");
-		matterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "purple_matter_block");
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_purple_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(2560, 6);
-		flower_charms[i] = new PowerFlowerCharm(68580, 6);
-		i++;
-		
-		matters[i] = new Item(new Item.Properties().group(ItemList.cTab)).setRegistryName(EMCBaubles.ModID, "violet_matter");
-		matterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "violet_matter_block");
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_violet_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(10240, 7);
-		flower_charms[i] = new PowerFlowerCharm(296820, 7);
-		i++;
-		
-		matters[i] = new Item(new Item.Properties().group(ItemList.cTab)).setRegistryName(EMCBaubles.ModID, "blue_matter");
-		matterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "blue_matter_block");
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_blue_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(40960, 8);
-		flower_charms[i] = new PowerFlowerCharm(1187280, 8);
-		i++;
-		
-		matters[i] = new Item(new Item.Properties().group(ItemList.cTab)).setRegistryName(EMCBaubles.ModID, "cyan_matter");
-		matterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "cyan_matter_block");
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_cyan_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(163840, 9);
-		flower_charms[i] = new PowerFlowerCharm(4749120, 9);
-		i++;
-		
-		matters[i] = new Item(new Item.Properties().group(ItemList.cTab)).setRegistryName(EMCBaubles.ModID, "green_matter");
-		matterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "green_matter_block");
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_green_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(655360, 10);
-		flower_charms[i] = new PowerFlowerCharm(18996480, 10);
-		i++;
-		
-		matters[i] = new Item(new Item.Properties().group(ItemList.cTab)).setRegistryName(EMCBaubles.ModID, "lime_matter");
-		matterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "lime_matter_block");
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_lime_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(2621440, 11);
-		flower_charms[i] = new PowerFlowerCharm(75985920, 11);
-		i++;
-		
-		matters[i] = new Item(new Item.Properties().group(ItemList.cTab)).setRegistryName(EMCBaubles.ModID, "yellow_matter");
-		matterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "yellow_matter_block");
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_yellow_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(10485760, 12);
-		flower_charms[i] = new PowerFlowerCharm(303953680, 12);
-		i++;
-		
-		matters[i] = new Item(new Item.Properties().group(ItemList.cTab)).setRegistryName(EMCBaubles.ModID, "orange_matter");
-		matterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "orange_matter_block");
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_orange_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(41943040, 13);
-		flower_charms[i] = new PowerFlowerCharm(1215774720L, 13);
-		i++;
-		
-		matters[i] = new Item(new Item.Properties().group(ItemList.cTab)).setRegistryName(EMCBaubles.ModID, "white_matter");
-		matterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "white_matter_block");
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_white_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(167772160, 14);
-		flower_charms[i] = new PowerFlowerCharm(4863098880L, 14);
-		i++;
-		
-		matters[i] = new Item(new Item.Properties().group(ItemList.cTab)).setRegistryName(EMCBaubles.ModID, "fading_matter");
-		matterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "fading_matter_block");
-		compressedMatterBlocks[i] = new Block(Block.Properties.create(Material.IRON).hardnessAndResistance(0.5F, 1.5F)).setRegistryName(EMCBaubles.ModID, "compressed_fading_matter_block");
-		collector_necklaces[i] = new CollectorNecklace(671088640, 15);
-		flower_charms[i] = new PowerFlowerCharm(19452395520L, 15);
-		i++;
-		
-		matters[i] = null;
-		matterBlocks[i] = null;
-		compressedMatterBlocks[i] = null;
-		collector_necklaces[i] = new CollectorNecklace(1000000000L,16);
-		flower_charms[i] = new PowerFlowerCharm(48000000000000L, 16);
-		
-		emc_belt = new EMCPickupBelt();
-		emc_refiller = new EMCRefiller();
-		emc_build_wand = new BlockReplacementWand();
-		__init = true;
-	}
-	
-	public static EMCPickupBelt getEMCBelt() {
-		if(!__init) {
-			init();
-		}
-		return emc_belt;
-	}
-	
-	public static EMCRefiller getEMCRefiller() {
-		if(!__init) {
-			init();
-		}
-		return emc_refiller;
-	}
-	
-	public static BlockReplacementWand getEMCBuildWand() {
-		if(!__init) {
-			init();
-		}
-		return emc_build_wand;
-	}
-	
-	public static Item getMatter(int i) {
-		if(!__init) {
-			init();
-		}
-		if (i < 0 || i > matters.length)
-			return null;
-		
-		return matters[i];
-	}
-	
-	public static Block getMatterBlock(int i) {
-		if(!__init) {
-			init();
-		}
-		if (i < 0 || i > matterBlocks.length)
-			return null;
-		
-		return matterBlocks[i];
-	}
-	
-	public static Block getCompressedMatterBlock(int i) {
-		if(!__init) {
-			init();
-		}
-		if (i < 0 || i > compressedMatterBlocks.length)
-			return null;
-		
-		return compressedMatterBlocks[i];
-	}
-	
-	public static CollectorNecklace getCollectorNeckalce(int i) {
-		if(!__init) {
-			init();
-		}
-		if (i < 0 || i > collector_necklaces.length)
-			return null;
-		
-		return collector_necklaces[i];
-	}
+   public static boolean isBlockInList(List<? extends String> list, BlockState toApply) {
+      for (String s : list) {
+         if (isStringBlock(s, toApply)) {
+            return true;
+         }
+      }
 
-	public static Item getPowerFlowerCharm(int i) {
-		if(!__init) {
-			init();
-		}
-		if (i < 0 || i > flower_charms.length)
-			return null;
-		
-		return flower_charms[i];
-	}
-	
-	@SubscribeEvent
-	public static void registerBlocks(RegistryEvent.Register<Block> evt) {
-		IForgeRegistry<Block> r = evt.getRegistry();
-		if(!__init) {
-			init();
-		}
-		for(int i = 0; i < matterBlocks.length; i++) {
-			if(i > 0 && i < 3) {
-				Block b = getCompressedMatterBlock(i);
-				if(b != null)
-					r.register(b);
-			}else {
-				Block b = getCompressedMatterBlock(i);
-				if(b != null)
-					r.register(b);
-				b = getMatterBlock(i);
-				if(b != null)
-					r.register(b);
-			}
-		}
-	}
-	
-	@SubscribeEvent
-	public static void registerItems(RegistryEvent.Register<Item> evt) {
-		IForgeRegistry<Item> r = evt.getRegistry();
-		if(!__init) {
-			init();
-		}
-		for(int i = 0; i < matters.length; i++) {
-			if(i != 1  && i != 2) {
-				Item itm = getMatter(i);
-				if(itm != null)
-					r.register(itm);
-				Block b = getMatterBlock(i);
-				if(b != null)
-					r.register(new BlockItem(b, new Item.Properties().group(ItemList.cTab)).setRegistryName(b.getRegistryName()));
-			}
-			Block b = getCompressedMatterBlock(i);
-			if(b != null)
-				r.register(new BlockItem(b, new Item.Properties().group(ItemList.cTab)).setRegistryName(b.getRegistryName()));
-			Item itm = getCollectorNeckalce(i);
-			if(itm != null)
-				r.register(itm);
-			itm = getPowerFlowerCharm(i);
-			if(itm != null)
-				r.register(itm);
-		}
-		r.register(getEMCBelt());
-		r.register(getEMCRefiller());
-		r.register(getEMCBuildWand());
-		
-	}
-	
-	
+      return false;
+   }
+
+   public static boolean isItemInList(List<? extends String> list, ItemStack toApply) {
+      for (String s : list) {
+         if (isStringItem(s, toApply)) {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
+   public static boolean isTool(ItemStack itm) {
+      if (itm.getItem().canBeDepleted()) {
+         return true;
+      } else if (itm.getItem() instanceof TieredItem) {
+         return true;
+      } else if (itm.getItem() instanceof FishingRodItem) {
+         return true;
+      } else {
+         return itm.getItem() instanceof FlintAndSteelItem ? true : itm.getItem() instanceof ShearsItem;
+      }
+   }
+
+   @OnlyIn(Dist.CLIENT)
+   @SubscribeEvent
+   public void registerScreens(FMLClientSetupEvent event) {
+      event.enqueueWork(() -> registerScreen(WAND_CONTAINER, WandSelectGui::new));
+   }
+   
+   @OnlyIn(Dist.CLIENT)
+   private static <C extends AbstractContainerMenu, U extends Screen & MenuAccess<C>> void registerScreen(
+      ContainerTypeRegistryObject<C> type, ScreenConstructor<C, U> factory
+   ) {
+      MenuScreens.register((MenuType)type.get(), factory);
+   }
+
+   @SubscribeEvent
+   public void register(RegisterEvent event) {
+      event.register(Keys.BLOCKS, helper -> {
+         for (int i = 0; i < 15; i++) {
+            if (i != 1 && i != 2) {
+               ResourceLocation var10001 = new ResourceLocation("emcbaubles", names[i] + "_matter_block");
+               Properties.of();
+               helper.register(var10001, new Block(Properties.copy(Blocks.IRON_BLOCK).strength(0.5F, 1.5F)));
+            }
+
+            ResourceLocation var2 = new ResourceLocation("emcbaubles", "compressed_" + names[i] + "_matter_block");
+            Properties.of();
+            helper.register(var2, new Block(Properties.copy(Blocks.IRON_BLOCK).strength(0.5F, 1.5F)));
+         }
+      });
+      event.register(
+         Keys.ITEMS,
+         helper -> {
+            for (int i = 0; i < 15; i++) {
+               if (i != 1 && i != 2) {
+                  helper.register(new ResourceLocation("emcbaubles", names[i] + "_matter"), new Item(new net.minecraft.world.item.Item.Properties()));
+                  helper.register(
+                     new ResourceLocation("emcbaubles", names[i] + "_matter_block"),
+                     new BlockItem(
+                        (Block)((Holder)ForgeRegistries.BLOCKS.getHolder(new ResourceLocation("emcbaubles", names[i] + "_matter_block")).get()).get(),
+                        new net.minecraft.world.item.Item.Properties()
+                     )
+                  );
+               }
+
+               helper.register(
+                  new ResourceLocation("emcbaubles", "compressed_" + names[i] + "_matter_block"),
+                  new BlockItem(
+                     (Block)((Holder)ForgeRegistries.BLOCKS.getHolder(new ResourceLocation("emcbaubles", "compressed_" + names[i] + "_matter_block")).get())
+                        .get(),
+                     new net.minecraft.world.item.Item.Properties()
+                  )
+               );
+               helper.register(new ResourceLocation("emcbaubles", "collector_mk" + (i + 1) + "_necklace"), new CollectorNecklace(neck_power[i], i + 1));
+               helper.register(new ResourceLocation("emcbaubles", "flower_mk" + (i + 1) + "_charm"), new PowerFlowerCharm(flower_power[i], i + 1));
+            }
+
+            helper.register(new ResourceLocation("emcbaubles", "collector_mk16_necklace"), new CollectorNecklace(neck_power[15], 16));
+            helper.register(new ResourceLocation("emcbaubles", "flower_mk16_charm"), new PowerFlowerCharm(flower_power[15], 16));
+         }
+      );
+   }
+
+   public static void onCreativeModeTabRegister(RegisterEvent event) {
+      event.register(
+         Registries.CREATIVE_MODE_TAB,
+         helper -> helper.register(
+               "emcbaublesctab",
+               CreativeModeTab.builder()
+                  .icon(() -> new ItemStack(WAND_ITEM.asItem()))
+                  .title(Component.literal("EMC Baubles"))
+                  .withLabelColor(16777215)
+                  .displayItems((params, output) -> {
+                     for (int i = 0; i < 15; i++) {
+                        if (i != 1 && i != 2) {
+                           output.accept((ItemLike)ForgeRegistries.ITEMS.getValue(new ResourceLocation("emcbaubles", names[i] + "_matter")));
+                           output.accept((ItemLike)ForgeRegistries.ITEMS.getValue(new ResourceLocation("emcbaubles", names[i] + "_matter_block")));
+                        }
+
+                        output.accept(
+                           (ItemLike)ForgeRegistries.ITEMS.getValue(new ResourceLocation("emcbaubles", "compressed_" + names[i] + "_matter_block"))
+                        );
+                        output.accept((ItemLike)ForgeRegistries.ITEMS.getValue(new ResourceLocation("emcbaubles", "collector_mk" + (i + 1) + "_necklace")));
+                        output.accept((ItemLike)ForgeRegistries.ITEMS.getValue(new ResourceLocation("emcbaubles", "flower_mk" + (i + 1) + "_charm")));
+                     }
+
+                     output.accept((ItemLike)ForgeRegistries.ITEMS.getValue(new ResourceLocation("emcbaubles", "collector_mk16_necklace")));
+                     output.accept((ItemLike)ForgeRegistries.ITEMS.getValue(new ResourceLocation("emcbaubles", "flower_mk16_charm")));
+                     output.accept(WAND_ITEM);
+                     output.accept(BELT_ITEM);
+                     output.accept(BRACELET_ITEM);
+                  })
+                  .build()
+            )
+      );
+   }
+
+   static {
+      PacketHandler.INSTANCE
+         .registerMessage(
+            1,
+            PacketHandler.WandNBTExchange.class,
+            PacketHandler.WandNBTExchange::encode,
+            PacketHandler.WandNBTExchange::decode,
+            PacketHandler.WandNBTExchange::handler
+         );
+   }
 }

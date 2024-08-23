@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "emcbaubles:white_matter",
+    {
+      "id": "projectexpansion:white_matter",
+      "required": false
+    }
+  ]
+}

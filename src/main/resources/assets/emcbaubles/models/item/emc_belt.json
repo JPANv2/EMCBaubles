@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "emcbaubles:items/emcbelt"
+        "layer0": "emcbaubles:item/emcbelt"
     }
 }

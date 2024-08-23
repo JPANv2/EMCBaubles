@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "emcbaubles:fading_matter",
+    {
+      "id": "projectexpansion:fading_matter",
+      "required": false
+    }
+  ]
+}
